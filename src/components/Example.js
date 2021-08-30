@@ -1,40 +1,53 @@
-import react , { useState } from 'react'
-
+import React , { useState , useEffect } from 'react'
 
 function Example(){
+    const [count, setCount] = useState(0)
+    const [action, setAction] = useState('')
+    const [scrollPosition , setScrollPosition] = useState(0)
 
-    const initalValue = () => {
-        let total = 0
-        for (let i = 0; i < 1000000; i++) {
-            total += i
+    useEffect(()=>{
+        // useEffect này đóng vai trò như một componetdidMount & componentDidUpdate 
+
+        document.title = `you click ${count} times`
+        console.log('component re-render')
+    }, [count]) // tham số thứ 2 của useEffect khi truyền vào một array có các phần tử là cái biến của state 
+        // khi đó nó componet sẽ được render lại nến biến state của nó thay đổi ... 
+
+
+
+
+    useEffect(()=>{
+        fetch(`https://reqres.in/api/${action}`)
+            .then((res) => {console.log(res)})
+            .catch((err) => {console.log(err)})
+    }, [action]) 
+
+    let handleScroll = () => {
+        setScrollPosition(window.scrollY)
+    }
+
+    useEffect(()=>{
+        document.addEventListener('scroll', handleScroll)
+
+        return () => {
+            document.removeEventListener('scroll', handleScroll)
         }
-        console.log('render component ')
-        return total
-    }
+    }, []) 
 
-
-    // để tránh render componet lại khi có một hàm xử lý phức tạp thì chúng ta sử arrow function để tránh re-render
-    const [count, setcount] = useState(() => { initalValue() }) 
-
-    let handleOnclick = () => {
-        setcount((prevState)=>{
-            return prevState + 1
-        }) // để tránh đồng bộ ta sử dụng tham số thứ 1 là một function
-
-        setcount((prevState)=>{
-            return prevState + 1
-        })
-    }
-
+    
+    
+    
+    console.log('component mount')
     return(
-        <>
-            <h4>function componet</h4>
-            <p>you clicked {count}</p>
-            <button onClick={handleOnclick}>Click me</button>
-        </>
+        <div style={{height: '3000px'}}>
+            <h4>useEffect</h4>
+            <p>you click {count} times</p>
+            <p style={{position: 'fixed', top : '50%' }}> value y : {scrollPosition}</p>
+            <button onClick={()=>{setCount(count + 1)}}>Click me</button>
+            <button onClick={()=>{setAction('users')}}>get users</button>
+            <button onClick={()=>{setAction('comments')}}>get comments</button>
+        </div>
     )
 }
-
-
 
 export default Example
