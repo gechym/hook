@@ -1,23 +1,13 @@
 import './App.css';
 import React, {Component} from 'react'
+import Example from './components/Example';
 
-class App extends Component {
-  constructor(){
-    super()
-    
-    this.state = {
-      'isCollapsed' : true
-    }
-  }
-
-  render(){
-    return (
-      <div className="App">
-       Hello word
-      </div>
-    )
-  }
-
+function App(){
+  return(
+    <>
+      <Example/>
+    </>
+  )
 }
 
 
