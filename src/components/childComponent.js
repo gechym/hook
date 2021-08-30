@@ -1,27 +1,26 @@
-import React , {useState, useEffect} from 'react'
+import React, {useEffect}  from 'react'
 
-function ChildComponent({ getData }){
-    const [comments , setComments] = useState([])
+function ChildComponent(){
+    useEffect(() => { // same same componentdidmount
+        console.log('oh yeard i am render')
+    })
 
-    useEffect(() => {
-        console.log('component child re-render')
 
-
-        getData('comments')
-            .then(res => res.json())
-            .then(res => {
-                let comments = res.data
-                setComments(comments)
-            })
-    },[getData])
     return(
         <>
-            <h1>all comment</h1>
-            <p>{JSON.stringify(comments)}</p>
+            <h1>Hello world, i am child-Component</h1>
         </>
     )
     
     
 }
+    // react.memo nó sẽ so sánh 
+    // nông(shallow comparision) 
+    // các props được truyền vào nếu khác nhau thì 
+    // component được re-reder lại
+export default React.memo(ChildComponent)
 
-export default ChildComponent
+
+// ngoài ra nếu chúng ta không thích so sánh 
+//kiểu react thì chúng ta có thể truyền vào một 
+//function và so sánh theo cách của mình và trả về true nếu muốn render và ngược lại
